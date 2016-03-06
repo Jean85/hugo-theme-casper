@@ -52,11 +52,17 @@
 
   <footer class="post-footer">
 
-
-    {{if .Site.Params.logo}}
-    <figure class="author-image">
-        <a class="img" href="{{.Site.BaseURL}}" style="background-image: url({{ $baseurl }}{{.Site.Params.logo}})"><span class="hidden">{{.Site.Params.author}}'s Picture</span></a>
-    </figure>
+    {{$author := index .Site.Data.authors (or .Params.author .Site.Params.author)}}
+    {{$authorname := or $author.name .Site.Params.author }}
+    {{$authorwebsite := or $author.website .Site.Params.authorwebsite }}
+    {{if $author}}
+        <figure class="author-image">
+          <a class="img" href="{{$authorwebsite}}" style="background-image: url({{$author.thumbnail}})"><span class="hidden">{{$authorname}}'s Picture</span></a>
+        </figure>
+    {{else if .Site.Params.logo}}
+        <figure class="author-image">
+          <a class="img" href="{{$authorwebsite}}" style="background-image: url({{ $baseurl }}{{.Site.Params.logo}})"><span class="hidden">{{.Site.Params.author}}'s Picture</span></a>
+        </figure>
     {{end}}
 
     {{ partial "author.html" . }}
